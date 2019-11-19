@@ -1,13 +1,8 @@
 package com.tinyspot.dongmall.util;
 
-import com.tinyspot.dongmall.entity.Goods;
-import com.tinyspot.dongmall.entity.GoodsR;
-import com.tinyspot.dongmall.entity.GoodsT;
+import com.tinyspot.dongmall.entity.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author tinyspot
@@ -89,6 +84,48 @@ public class Convert {
             }
         }
 
+        return result;
+    }
+
+    public static CartR carttTOCartR(CartT cartT){
+        CartR cartR = new CartR(cartT.getUserId(), cartT.getGoodsId(), cartT.getParam(),cartT.getNumber()
+        ,cartT.getDetail(), cartT.getNowPrice(), cartT.getOldPrice(), cartT.getSeckill(), null);
+
+        List<String> list = new ArrayList<>();
+        String str[] = cartT.getSrc().split(";");
+        for (String s : str)
+            list.add(s);
+        cartR.setSrc(list);
+
+        return cartR;
+    }
+
+    /*
+    将CartT的List转换为CartR的list
+     */
+    public static List<CartR> convertCartTList(List<CartT> list) {
+        List<CartR> result = new ArrayList<>();
+
+        for (CartT cartT : list){
+            CartR cartR = carttTOCartR(cartT);
+            result.add(cartR);
+        }
+
+        return result;
+    }
+
+    /*
+    将Map<Integer, List<GoodsR>>转换为List<GoodsAndType>
+     */
+    public static List<GoodsAndType> mapToList(Map<Integer,List<GoodsR>> map) {
+        List<GoodsAndType> result = new ArrayList<>();
+        Set<Integer> keys = map.keySet();
+        GoodsR t = null;
+        for (Integer key : keys){
+            t = map.get(key).get(0);
+            GoodsAndType goodsAndType = new GoodsAndType(t.getTypeId(), t.getTypeName(), map.get(key));
+            result.add(goodsAndType);
+        }
         return result;
     }
 }

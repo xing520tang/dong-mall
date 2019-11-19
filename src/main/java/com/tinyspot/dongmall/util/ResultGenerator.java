@@ -6,10 +6,10 @@ package com.tinyspot.dongmall.util;
  * 结果生成器
  */
 public class ResultGenerator {
-    private static final String DEFAULT_SUCCESS_MESSAGE = "SUCCESS";
-    private static final String DEFAULT_FAIL_MESSAGE = "FAIL";
-    private static final int RESULT_CODE_SUCCESS = 200;
-    private static final int RESULT_CODE_SERVER_ERROR = 500;
+    public static final String DEFAULT_SUCCESS_MESSAGE = "SUCCESS";
+    public static final String DEFAULT_FAIL_MESSAGE = "FAIL";
+    public static final int RESULT_CODE_SUCCESS = 200;
+    public static final int RESULT_CODE_SERVER_ERROR = 500;
 
     public static Result genSuccessResult(){
         Result result = new Result(RESULT_CODE_SUCCESS, DEFAULT_SUCCESS_MESSAGE);

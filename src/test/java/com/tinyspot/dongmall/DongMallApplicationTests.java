@@ -5,10 +5,10 @@ import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.tinyspot.dongmall.entity.Goods;
-import com.tinyspot.dongmall.entity.GoodsT;
-import com.tinyspot.dongmall.entity.Temp;
+import com.github.pagehelper.PageHelper;
+import com.tinyspot.dongmall.entity.*;
 import com.tinyspot.dongmall.mapper.GoodsMapper;
+import com.tinyspot.dongmall.service.GoodsService;
 import com.tinyspot.dongmall.util.Convert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +26,9 @@ public class DongMallApplicationTests {
 
     @Autowired
     GoodsMapper goodsMapper;
+
+    @Autowired
+    GoodsService goodsService;
 
     @Test
     public void contextLoads() {
@@ -72,6 +75,31 @@ public class DongMallApplicationTests {
 //        goods.setSold((int)(Math.random()*100));
 //        goodsMapper.updateGoods(goods);
 //        System.out.println("wancheng.........");
+    }
+
+    @Test
+    public void testBody(){
+        String str = "Body: {\"session_key\":\"zap0knbr5dwbui4hbd+zAg==\",\"openid\":\"kdsjafkljdoifwjeofijlkqwe\"}";
+        String substring = str.substring(str.indexOf("{"));
+        System.out.println("substring: " + substring);
+        Body body = JSONUtil.toBean(substring, Body.class);
+        System.out.println(body);
+    }
+
+    @Test
+    public void testFenYe(){
+        PageHelper.startPage(0, 10);
+        //pagehelper后面紧跟的就是一个分页查询
+        List<Goods> list = goodsService.getAllSeckillGoods();
+        System.out.println("*************************");
+        System.out.println("list的size： " + list.size());
+        System.out.println(list);
+        System.out.println("*************************");
+        List<GoodsR> result = Convert.convertGoods(list);
+        System.out.println("*************************");
+        System.out.println("result的size： " + result.size());
+        System.out.println(result);
+        System.out.println("*************************");
     }
 
 }

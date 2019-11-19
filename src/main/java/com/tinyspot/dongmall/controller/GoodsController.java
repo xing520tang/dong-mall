@@ -1,6 +1,9 @@
 package com.tinyspot.dongmall.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tinyspot.dongmall.entity.Goods;
+import com.tinyspot.dongmall.entity.GoodsAndType;
 import com.tinyspot.dongmall.entity.GoodsR;
 import com.tinyspot.dongmall.service.GoodsService;
 import com.tinyspot.dongmall.util.Convert;
@@ -34,9 +37,14 @@ public class GoodsController {
      */
     @GetMapping("/seckill")
     @ResponseBody
-    public List<GoodsR> getAllSecKill(){
+    public List<GoodsR> getAllSecKill(@RequestParam(value = "pn", defaultValue = "1") Integer pn){
+        logger.info("获取所有秒杀商品...");
+        //开启分页，从pn也开始，一页10个数据
+        PageHelper.startPage(pn, 10);
+        //pagehelper后面紧跟的就是一个分页查询
         List<Goods> list = goodsService.getAllSeckillGoods();
         List<GoodsR> result = Convert.convertGoods(list);
+
         return result;
     }
 
@@ -46,9 +54,11 @@ public class GoodsController {
      */
     @GetMapping("/all")
     @ResponseBody
-    public Map<Integer, List<GoodsR>> getClassifyGoods(){
+    public List<GoodsAndType> getClassifyGoods(){
+        logger.info("获取所有商品，按照分类返回...");
         List<Goods> list = goodsService.getAllGoods();
-        Map<Integer, List<GoodsR>> result = Convert.sort(list);
+        Map<Integer, List<GoodsR>> map = Convert.sort(list);
+        List<GoodsAndType> result = Convert.mapToList(map);
         return result;
     }
 
@@ -58,6 +68,7 @@ public class GoodsController {
     @GetMapping("/detail")
     @ResponseBody
     public GoodsR getGoodsDetail(@RequestParam("id") Integer id){
+        logger.info("返回商品Id为" + id + "的详细信息...");
         Goods good = goodsService.getGoodsDetail(id);
         GoodsR result = Convert.goodsToGoodsR(good);
         return result;
